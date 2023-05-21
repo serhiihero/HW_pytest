@@ -1,0 +1,54 @@
+Env: MacBook Pro (13-inch, Intel Core i5, macOS Monterey 12.4)
+
+* Install postgresql or other SQL System
+- install brew with command:
+    brew install postgresql
+- start postgresql with command:
+    brew services start postgresql
+- run psql (default user) with command:
+    psql postgres
+
+* Change password for user postgres
+- change password with command:
+    alter user postgres with password '888';
+
+* Create Data Base store
+- create DB with command:
+    create database goods;
+- leave psql with command:
+    \q
+
+* Create table products with columns (id, name, price)
+- switch to goods DB with command:
+    psql -d goods
+- create table products with given columns with command:
+    create table products(id serial primary key, name varchar(30) unique, price float);
+- check created table with command:
+    \d
+- check columns in table products with command:
+    \d products
+
+* Create table orders with columns (id, product_id, quantity)
+- create table orders with given columns with command:
+    create table orders(id int, product_id int, quantity int, constraint fk_product_id foreign key (product_id) references products(id));
+- check created table with command:
+    \d
+- check columns in table orders with command:
+    \d orders
+
+* Add 5 different values to products
+- add values to products table with command:
+    insert into products(name, price) values ('Apple', 10.99), ('Orange', 30.99), ('Watermelon', 50), ('Banana', 29), ('Strawberry', 89.99);
+- check added values with command:
+    select * from products;
+
+* Add 5 different values to orders according to your products
+- add values to orders table with command:
+    insert into orders(product_id, quantity) values (1, 300), (2, 400), (3, 800), (4, 300), (5, 200);
+- check added values with command:
+    select * from orders;
+
+* Create select with the result with such columns (name, price, quantity, total)
+select p.name, p.price, o.quantity, total(p.price * o.quantity) from products as p join orders as o on p.id = o.product_id;
+
+
